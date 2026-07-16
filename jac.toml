@@ -11,8 +11,12 @@ default_model = "mockllm"
 [scale.microservices]
 enabled = false
 
+[scale.database]
+backend = "mongo"
+
 [scale.events]
 enabled = true
+broker = "redis"
 
 [dependencies.npm]
 react = "^18.2.0"

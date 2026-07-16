@@ -53,7 +53,8 @@ conformance tests pass against BOTH `jac start` and the converted output.
 
 1. FIXED: backticked `` `root `` entry trigger emitted `lambda: root` (jaclib
    function, not the `Root` class) -> `issubclass()` TypeError at spawn.
-   Fixed in pyast_gen_pass + regression test in tests/language/test_bugs.jac.
+   Fixed in pyast_gen_pass + regression test in tests/language/test_bugs.jac
+   (branch `fix/backtick-root-entry-trigger`).
 2. OPEN: `jac run`/`jac start` hangs forever when `DATABASE_HOST`/`MONGODB_URI`
    env vars point at an unreachable Mongo (pymongo server-selection blocks with
    no timeout, no error message).
@@ -61,6 +62,22 @@ conformance tests pass against BOTH `jac start` and the converted output.
    closure (`unsupported/sv_micro.jac` triggered it) and then derives wrong
    service filenames (`features.rest_basic.jac`, `endpoints.jac` instead of
    `endpoints.sv.jac`), so auto-split services can never boot.
+4. FIXED: `jac start --scale` could not deploy from a macOS driver: the app
+   seal exec'd the linux pod binary on the host (Exec format error). The seal
+   now runs in a throwaway linux container (branch
+   `fix/k8s-deploy-macos-and-local-clusters`).
+5. FIXED: the bundle PVC hardcoded ReadWriteMany, which k3s/kind/minikube
+   local-path provisioners cannot bind; single-node clusters now fall back to
+   ReadWriteOnce, with a `bundle_access_mode` override (same branch).
+6. FIXED: `_deploy_databases` appended MONGODB_URI/REDIS_URL secret refs to
+   env_list AFTER the container spec had copied it, so the app pod never
+   received the provisioned database connections and silently fell back to
+   pod-local sqlite while Mongo/Redis ran unused (same branch).
+7. UX GAP: the deploy provisions Redis but the pod's `jac install` only adds
+   the redis pip package if jac.toml declares a matching capability intent;
+   this project declares `[scale.database] backend` and `[scale.events]
+   broker` for that reason. Deploy-provisioned services should probably imply
+   their capability automatically.
 
 ## Known conversion gaps (from the jaseci-repo survey)
 
