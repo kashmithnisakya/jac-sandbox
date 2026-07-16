@@ -55,14 +55,14 @@ conformance tests pass against BOTH `jac start` and the converted output.
    function, not the `Root` class) -> `issubclass()` TypeError at spawn.
    Fixed in pyast_gen_pass + regression test in tests/language/test_bugs.jac
    (branch `fix/backtick-root-entry-trigger`).
-2. OPEN: `jac run`/`jac start` hangs forever when `DATABASE_HOST`/`MONGODB_URI`
+2. OPEN (jaseci-labs/jac#7518): `jac run`/`jac start` hangs forever when `DATABASE_HOST`/`MONGODB_URI`
    env vars point at an unreachable Mongo (pymongo server-selection blocks with
    no timeout, no error message).
-3. OPEN: microservice auto-detection scans files outside the entry import
+3. OPEN (jaseci-labs/jac#7519): microservice auto-detection scans files outside the entry import
    closure (`unsupported/sv_micro.jac` triggered it) and then derives wrong
    service filenames (`features.rest_basic.jac`, `endpoints.jac` instead of
    `endpoints.sv.jac`), so auto-split services can never boot.
-9. OPEN: under `jac start` the static @schedule task gets registered twice
+9. OPEN (jaseci-labs/jac#7520): under `jac start` the static @schedule task gets registered twice
    with mismatched class identity; one copy runs (beats advance), the
    phantom copy logs "Error executing task 'HeartbeatTick': Invalid walker
    object" every tick.
@@ -102,8 +102,8 @@ conformance tests pass against BOTH `jac start` and the converted output.
    path; unsupported scale imports still fail the audit loudly.
 6. CLOSED: MTIR meaning-metadata pickled to backend/mtir.pkl and hydrated at
    boot; the prompt-fidelity test pins byte-identical prompts vs jac start.
-7. OPEN: ~25-30% dead weight in the vendored runtime closure (optimization,
-   not correctness).
+7. OPEN (jaseci-labs/jac#7521): ~25-30% dead weight in the vendored runtime
+   closure (optimization, not correctness).
 8. BY DESIGN: `sv` microservice splits remain unsupported; the audit refuses
    them with a clear message.
 
