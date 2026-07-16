@@ -28,5 +28,12 @@ baseline:
 convert:
 	$(JAC) build --as source
 
+test-converted: convert
+	cd ejected/backend && python3 -m venv .venv && .venv/bin/pip install -q -r requirements.txt
+	cd ejected/backend && { .venv/bin/uvicorn main:app --port 8010 > server.log 2>&1 & echo $$! > .pid; }; \
+	sleep 10; \
+	BASE_URL=http://localhost:8010 $(PYTEST) tests -q; status=$$?; \
+	kill $$(cat ejected/backend/.pid) 2>/dev/null; exit $$status
+
 clean:
 	rm -rf $(VENV) ejected

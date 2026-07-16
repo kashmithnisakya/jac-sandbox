@@ -40,3 +40,6 @@ watchdog = ">=3.0.0"
 base_route_app = "app"
 
 [plugins.client]
+
+[eject]
+allow_unsupported = true
