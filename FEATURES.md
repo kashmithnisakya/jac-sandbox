@@ -78,6 +78,12 @@ conformance tests pass against BOTH `jac start` and the converted output.
    this project declares `[scale.database] backend` and `[scale.events]
    broker` for that reason. Deploy-provisioned services should probably imply
    their capability automatically.
+8. FIXED: the client (browser) compile path skips the type checker that
+   stamps `call_kind`, so Python-builtin calls in cl code (e.g. `enumerate`
+   in the guestbook's comprehension) lowered to bare identifiers and crashed
+   the SPA at render with "enumerate is not defined". The ES codegen now
+   classifies calls itself when call_kind is unset (same branch as the
+   deploy fixes).
 
 ## Known conversion gaps (from the jaseci-repo survey)
 
