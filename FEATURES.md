@@ -14,12 +14,12 @@ conformance tests pass against BOTH `jac start` and the converted output.
 | File uploads | `features/uploads.jac` | `POST /walker/UploadDoc` (auth), `POST /walker/UploadPublic` (pub) | Multipart UploadFile fields |
 | Persistence + isolation | `features/persistence.jac` | `POST /walker/AddNote`, `POST /walker/CountNotes` | Notes survive restarts; user A cannot see user B's notes |
 | Permissions | `features/permissions.jac` | `POST /walker/ShareNote`, `POST /walker/ReadShared` | `grant(ReadPerm)` + cross-user read by node id |
-| Scheduled jobs | `features/scheduler.jac` | `@schedule` interval walker + `POST /walker/ReadHeartbeat` | Beats accumulate while server runs; CONVERSION GAP: ejected main.py never starts the scheduler |
-| WebSockets | `features/websocket.jac` | `ws /ws/WsEcho` (pub), `ws /ws/WsBroadcast` (broadcast), `ws /ws/WsPrivate` (auth) | CONVERSION GAP: eject demotes these to plain POST |
-| Webhooks | `features/webhook.jac` | `POST /webhook/HookOrderPaid`, `POST /webhook/HookPing` | HMAC + replay verification; CONVERSION GAP: eject drops HMAC |
+| Scheduled jobs | `features/scheduler.jac` | `@schedule` interval walker + `POST /walker/ReadHeartbeat` | Beats accumulate while server runs |
+| WebSockets | `features/websocket.jac` | `ws /ws/WsEcho` (pub), `ws /ws/WsBroadcast` (broadcast), `ws /ws/WsPrivate` (auth) | Token handshake, result frames, broadcast fan-out |
+| Webhooks | `features/webhook.jac` | `POST /webhook/HookOrderPaid`, `POST /webhook/HookPing` | HMAC + replay verification via /api-key/create keys |
 | Events | `features/events.jac` | `POST /walker/EmitEvent`, `POST /function/read_events` | `publish` -> `@subscribe` handler delivery |
-| Key-value store | `features/kvstore.jac` | `POST /walker/KvPut`, `POST /walker/KvGet` | Redis-backed kvstore; lazy client so boot works without redis; CONVERSION GAP: scale imports crash ejected boot |
-| Typed by llm() | `features/byllm_typed.jac` | `POST /walker/Classify` | Structured output via sem strings + MockLLM; CONVERSION GAP: MTIR metadata dropped on eject (prompt drift) |
+| Key-value store | `features/kvstore.jac` | `POST /walker/KvPut`, `POST /walker/KvGet` | Redis-backed kvstore; lazy client so boot works without redis |
+| Typed by llm() | `features/byllm_typed.jac` | `POST /walker/Classify` | Structured output via sem strings + MockLLM; prompt-fidelity golden pins MTIR parity |
 | by llm() with tools | `features/byllm_tools.jac` | `POST /walker/Advise` | ReAct tool loop, scripted MockLLM |
 | Integration app + client | `endpoints.sv.jac`, `frontend.cl.jac` | `POST /walker/PostMessage`, `POST /walker/ListMessages`, `GET /` (SPA) | Guestbook from the jac template; typed `list[Message]` reports |
 | Audit loud-failure case | `unsupported/sv_micro.jac` | none (NOT imported by main.jac) | Converting a project that includes `sv import` must fail loudly |
