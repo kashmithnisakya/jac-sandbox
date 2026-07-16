@@ -1,0 +1,18 @@
+[
+  {
+    "data": "tick-0",
+    "event": "message"
+  },
+  {
+    "data": "tick-1",
+    "event": "message"
+  },
+  {
+    "data": "tick-2",
+    "event": "message"
+  },
+  {
+    "data": {},
+    "event": "end"
+  }
+]

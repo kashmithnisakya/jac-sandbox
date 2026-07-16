@@ -1,0 +1,35 @@
+{
+  "data": {
+    "reports": [
+      {
+        "client_id": "conf",
+        "echo": "hi-ws",
+        "protocol": "websocket"
+      }
+    ],
+    "result": {
+      "_jac_archetype": "walker",
+      "_jac_id": "<VOLATILE>",
+      "_jac_type": "WsEcho",
+      "client_id": "conf",
+      "message": "hi-ws",
+      "reports": [
+        {
+          "client_id": "conf",
+          "echo": "hi-ws",
+          "protocol": "websocket"
+        }
+      ],
+      "restspec": {
+        "_jac_archetype": "archetype",
+        "_jac_id": "<VOLATILE>",
+        "_jac_type": "RestSpecs",
+        "broadcast": false,
+        "method": "",
+        "path": "",
+        "protocol": "websocket"
+      }
+    }
+  },
+  "ok": true
+}

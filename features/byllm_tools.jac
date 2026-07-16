@@ -5,7 +5,7 @@ import from jaclang.byllm.lib { Model }
 
 glob advisor_llm: Model = Model(
     model_name="mockllm",
-    config={"outputs": ['"The answer is 42.5"']}
+    config={"outputs": ['"The answer is 42.5"'] * 500}
 );
 
 def lookup_price(symbol: str) -> str {

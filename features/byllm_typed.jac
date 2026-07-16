@@ -7,7 +7,7 @@ import from jaclang.byllm.lib { Model }
 
 glob sentiment_llm: Model = Model(
     model_name="mockllm",
-    config={"outputs": ['{"label": "positive", "score": 0.9}']}
+    config={"outputs": ['{"label": "positive", "score": 0.9}'] * 500}
 );
 
 obj Review {

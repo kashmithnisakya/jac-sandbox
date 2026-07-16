@@ -1,0 +1,38 @@
+{
+  "data": {
+    "reports": [
+      {
+        "status": "up",
+        "via": "restspec-get"
+      }
+    ],
+    "result": {
+      "_jac_archetype": "walker",
+      "_jac_id": "<VOLATILE>",
+      "_jac_type": "ApiStatus",
+      "reports": [
+        {
+          "status": "up",
+          "via": "restspec-get"
+        }
+      ],
+      "restspec": {
+        "_jac_archetype": "archetype",
+        "_jac_id": "<VOLATILE>",
+        "_jac_type": "RestSpecs",
+        "broadcast": false,
+        "method": "GET",
+        "path": "/api/v1/status",
+        "protocol": "http"
+      }
+    }
+  },
+  "error": null,
+  "meta": {
+    "extra": {
+      "http_status": 200
+    }
+  },
+  "ok": true,
+  "type": "response"
+}

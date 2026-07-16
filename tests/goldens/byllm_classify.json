@@ -1,0 +1,24 @@
+{
+  "data": {
+    "reports": [
+      "{\"label\": \"positive\", \"score\": 0.9}"
+    ],
+    "result": {
+      "_jac_archetype": "walker",
+      "_jac_id": "<VOLATILE>",
+      "_jac_type": "Classify",
+      "reports": [
+        "{\"label\": \"positive\", \"score\": 0.9}"
+      ],
+      "text": "great product"
+    }
+  },
+  "error": null,
+  "meta": {
+    "extra": {
+      "http_status": 200
+    }
+  },
+  "ok": true,
+  "type": "response"
+}

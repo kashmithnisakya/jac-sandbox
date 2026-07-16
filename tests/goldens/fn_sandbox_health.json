@@ -1,0 +1,17 @@
+{
+  "data": {
+    "reports": [],
+    "result": {
+      "ok": true,
+      "service": "jac-sandbox"
+    }
+  },
+  "error": null,
+  "meta": {
+    "extra": {
+      "http_status": 200
+    }
+  },
+  "ok": true,
+  "type": "response"
+}
