@@ -62,6 +62,10 @@ conformance tests pass against BOTH `jac start` and the converted output.
    closure (`unsupported/sv_micro.jac` triggered it) and then derives wrong
    service filenames (`features.rest_basic.jac`, `endpoints.jac` instead of
    `endpoints.sv.jac`), so auto-split services can never boot.
+9. OPEN: under `jac start` the static @schedule task gets registered twice
+   with mismatched class identity; one copy runs (beats advance), the
+   phantom copy logs "Error executing task 'HeartbeatTick': Invalid walker
+   object" every tick.
 4. FIXED: `jac start --scale` could not deploy from a macOS driver: the app
    seal exec'd the linux pod binary on the host (Exec format error). The seal
    now runs in a throwaway linux container (branch
@@ -85,17 +89,24 @@ conformance tests pass against BOTH `jac start` and the converted output.
    classifies calls itself when call_kind is unset (same branch as the
    deploy fixes).
 
-## Known conversion gaps (from the jaseci-repo survey)
+## Conversion gaps: final status (Phase 3 complete)
 
-These are the Phase 3 workstreams; each row above marked CONVERSION GAP maps
-to one:
+1. CLOSED: scheduler wired into ejected main.py (@schedule symbols register
+   with the vendored core scheduler; no HTTP endpoint emitted).
+2. CLOSED: protocol=WEBSOCKET walkers mount as /ws/ routes (token handshake,
+   result frames, broadcast fan-out); WS *functions* still audit-blocked.
+3. CLOSED: protocol=WEBHOOK walkers mount at /webhook/ behind X-API-Key +
+   HMAC-SHA256 + replay window; /api-key/create ships in the output.
+4. CLOSED: publish/@subscribe lowered to an in-process broker adapter.
+5. CLOSED: kvstore lowered to a redis-py adapter satisfying the same import
+   path; unsupported scale imports still fail the audit loudly.
+6. CLOSED: MTIR meaning-metadata pickled to backend/mtir.pkl and hydrated at
+   boot; the prompt-fidelity test pins byte-identical prompts vs jac start.
+7. OPEN: ~25-30% dead weight in the vendored runtime closure (optimization,
+   not correctness).
+8. BY DESIGN: `sv` microservice splits remain unsupported; the audit refuses
+   them with a clear message.
 
-1. Scheduler vendored but never wired into ejected `main.py` (jobs silently stop).
-2. `protocol=WEBSOCKET` walkers demoted to non-streaming POST endpoints.
-3. `protocol=WEBHOOK` walkers lose HMAC + replay verification.
-4. `@subscribe`/`publish` events not represented in ejected output.
-5. `jaclang.scale.*` imports (kvstore) skipped by the vendor deny-list, so the
-   ejected backend crashes at boot instead of failing at build time.
-6. byllm MTIR meaning-metadata is not serialized, so prompts/schemas silently
-   differ between `jac start` and the ejected server.
-7. ~25-30% dead weight in the vendored runtime closure.
+Version caveat: goldens (incl. the byllm prompt) are recorded against the
+jac version that serves the baseline; a cluster running a different release
+may legitimately drift on prompt text.

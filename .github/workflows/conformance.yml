@@ -1,0 +1,51 @@
+# Conformance matrix: the same pytest suite runs against `jac start` and
+# against the `jac build --as source` output. Any drift between them (or
+# against the recorded goldens) fails the build.
+#
+# NOTE: needs a jaclang release carrying the conversion workstreams
+# (capability audit, envelope parity, ws/webhook/scheduler/kvstore/events
+# lowering, MTIR shipping). Until then, install jaclang from the
+# feat/jac-source-conversion branch of jaseci-labs/jaseci.
+name: conformance
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  baseline:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Install jac
+        run: pip install jaclang
+      - name: Test harness venv
+        run: make venv
+      - name: Boot jac start
+        run: |
+          (jac start > server.log 2>&1 &)
+          timeout 180 sh -c 'until curl -sf -o /dev/null -X POST \
+            -H "content-type: application/json" -d "{}" \
+            http://localhost:8000/walker/PingPub; do sleep 3; done'
+      - name: Suite vs jac start
+        run: make test
+
+  converted:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Install jac
+        run: pip install jaclang
+      - name: Test harness venv
+        run: make venv
+      - name: Convert, boot and test the ejected app
+        run: make test-converted

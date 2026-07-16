@@ -1,0 +1,6 @@
+[
+  "    This is a task you must complete by returning only the output.",
+  "    Do not include explanations, code, or extra text\u2014only the result.",
+  "    ",
+  "[Text(text=\"Classify the sentiment of a customer review.\\n\\ntext = ('prompt-fidelity-probe', 'The raw review text to classify.')\")]"
+]

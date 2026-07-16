@@ -16,7 +16,7 @@ import from features.websocket { WsEcho, WsBroadcast, WsPrivate }
 import from features.webhook { HookOrderPaid, HookPing }
 import from features.events { EmitEvent, read_events }
 import from features.kvstore { KvPut, KvGet }
-import from features.byllm_typed { Classify }
+import from features.byllm_typed { Classify, read_llm_prompts }
 import from features.byllm_tools { Advise }
 
 # Client-side UI
