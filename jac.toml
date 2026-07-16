@@ -1,9 +1,18 @@
 [project]
 name = "jac-sandbox"
 version = "0.1.0"
-description = "A full-stack Jac application"
+description = "Feature-matrix test bench for Jac to Python/JS conversion"
 entry-point = "main.jac"
 kind = "web-app"
+
+[byllm.model]
+default_model = "mockllm"
+
+[scale.microservices]
+enabled = false
+
+[scale.events]
+enabled = true
 
 [dependencies.npm]
 react = "^18.2.0"
