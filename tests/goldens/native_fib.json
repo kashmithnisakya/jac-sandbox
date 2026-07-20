@@ -1,0 +1,32 @@
+{
+  "data": {
+    "reports": [
+      {
+        "fib": 102334155,
+        "n": 40,
+        "via": "native"
+      }
+    ],
+    "result": {
+      "_jac_archetype": "walker",
+      "_jac_id": "<VOLATILE>",
+      "_jac_type": "NativeFib",
+      "n": 40,
+      "reports": [
+        {
+          "fib": 102334155,
+          "n": 40,
+          "via": "native"
+        }
+      ]
+    }
+  },
+  "error": null,
+  "meta": {
+    "extra": {
+      "http_status": 200
+    }
+  },
+  "ok": true,
+  "type": "response"
+}

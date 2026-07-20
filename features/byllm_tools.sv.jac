@@ -1,16 +1,16 @@
 """by llm() with tools: a ReAct loop over a local tool function, driven by
-a scripted MockLLM for determinism."""
+a scripted MockLLM for determinism.
+
+Bodies in `features/impl/byllm_tools.impl.jac`. `advise` stays body-less
+here by design: `by advisor_llm(...)` IS its implementation."""
 
 import from jaclang.byllm.lib { Model }
 
 glob advisor_llm: Model = Model(
-    model_name="mockllm",
-    config={"outputs": ['"The answer is 42.5"'] * 500}
-);
+         model_name="mockllm", config={"outputs": ['"The answer is 42.5"'] * 500}
+     );
 
-def lookup_price(symbol: str) -> str {
-    return "42.5";
-}
+def lookup_price(symbol: str) -> str;
 
 sem lookup_price = "Look up the current price for a stock symbol.";
 
@@ -21,7 +21,5 @@ sem advise = "Answer a finance question, using tools when needed.";
 walker:pub Advise {
     has question: str;
 
-    can go with Root entry {
-        report {"answer": advise(self.question)};
-    }
+    can go with Root entry;
 }

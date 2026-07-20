@@ -1,79 +1,78 @@
-"""jac-sandbox - Client-Side UI."""
+"""jac-sandbox - Client-Side UI: the GUI test bench.
 
-import from .components.MessageCard { MessageCard }
+One panel per feature row in FEATURES.md, so every endpoint the server exposes
+can be driven by hand from a browser and its raw envelope read back. This is
+the human-facing twin of `tests/` — the pytest suite asserts the wire contract,
+this page lets you go and look at it.
 
-sv import from endpoints { Message, PostMessage, ListMessages }
+Panels call the server the idiomatic way (`sv import` + `root spawn` / direct
+function call), which is the point: that call path is itself part of what the
+conversion has to reproduce, so exercising it here exercises the converter.
+
+Bodies in `impl/frontend.impl.jac`."""
+
+import from "@jac/runtime" { jacIsLoggedIn }
+
+import from .components.AuthBar { AuthBar }
+import from .components.RestPanel { RestPanel }
+import from .components.GraphPanel { GraphPanel }
+import from .components.RealtimePanel { RealtimePanel }
+import from .components.ScalePanel { ScalePanel }
+import from .components.UploadPanel { UploadPanel }
+import from .components.AiPanel { AiPanel }
+import from .components.NativePanel { NativePanel }
+import from .components.GuestbookPanel { GuestbookPanel }
 
 def:pub app -> JsxElement {
-    has messages: list[Message] = [],
-        author: str = "",
-        text: str = "";
+    has authed: bool = False;
 
-    # Load existing messages once, when the component first mounts.
     can with entry {
-        loadMessages();
+        syncAuth();
     }
 
-    async def loadMessages -> None;
-    async def postMessage(e: FormEvent) -> None;
+    def syncAuth -> None;
 
     return
         <div
             style={{
-                "maxWidth": "600px",
-                "margin": "2rem auto",
-                "padding": "0 1rem",
-                "fontFamily": "system-ui, -apple-system, sans-serif",
-                "color": "#1a1a2e"
+                "maxWidth": "900px",
+                "margin": "0 auto",
+                "padding": "1.5rem 1rem 4rem",
+                "fontFamily": "system-ui, -apple-system, 'Segoe UI', sans-serif",
+                "color": "#101828",
+                "backgroundColor": "#f9fafb",
+                "minHeight": "100vh"
             }}
         >
-            <h1>jac-sandbox</h1>
-            <p style={{"color": "#666"}}>A tiny full-stack guestbook in Jac.</p>
-            <form
-                onSubmit={postMessage}
-                style={{"display": "flex", "gap": "0.5rem", "marginBottom": "1.5rem"}}
-            >
-                <input
-                    type="text"
-                    value={author}
-                    onChange={lambda (e: any) { author = e.target.value; }}
-                    placeholder="Name"
+            <header style={{"marginBottom": "1.1rem"}}>
+                <h1
                     style={{
-                        "flex": "1",
-                        "padding": "0.6rem",
-                        "border": "1px solid #ddd",
-                        "borderRadius": "6px"
-                    }}
-                />
-                <input
-                    type="text"
-                    value={text}
-                    onChange={lambda (e: any) { text = e.target.value; }}
-                    placeholder="Say something..."
-                    style={{
-                        "flex": "2",
-                        "padding": "0.6rem",
-                        "border": "1px solid #ddd",
-                        "borderRadius": "6px"
-                    }}
-                />
-                <button
-                    type="submit"
-                    style={{
-                        "padding": "0.6rem 1.2rem",
-                        "backgroundColor": "#4CAF50",
-                        "color": "white",
-                        "border": "none",
-                        "borderRadius": "6px",
-                        "cursor": "pointer"
+                        "margin": "0 0 0.2rem",
+                        "fontSize": "1.45rem",
+                        "letterSpacing": "-0.01em"
                     }}
                 >
-                    Post
-                </button>
-            </form>
-            {[
-                <MessageCard key={idx} author={msg.author} text={msg.text}/>
-                for (idx, msg) in enumerate(messages)
-            ]}
+                    jac-sandbox
+                </h1>
+                <p
+                    style={{
+                        "color": "#667085",
+                        "margin": "0",
+                        "fontSize": "0.88rem",
+                        "lineHeight": "1.5"
+                    }}
+                >
+                    Feature-matrix test bench. Every endpoint is wired to the running server — click a probe and read the envelope. Headers collapse; the dot is the last verdict.
+                </p>
+            </header>
+            <AuthBar authed={authed} onAuthChange={syncAuth}/>
+            <RestPanel authed={authed}/>
+            <GraphPanel authed={authed}/>
+            <NativePanel/>
+            <RealtimePanel authed={authed}/>
+            <ScalePanel/>
+            <UploadPanel authed={authed}/>
+            <AiPanel/>
+            <GuestbookPanel/>
         </div>;
 }

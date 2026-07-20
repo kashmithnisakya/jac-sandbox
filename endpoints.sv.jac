@@ -10,6 +10,8 @@ to require authentication and give each user their own isolated `root`.
 The walkers report `Message` nodes directly. Typing `reports` as
 `list[Message]` makes `(spawn W).reports` a typed `list[Message]` on the client,
 so the UI gets `.author` / `.text` dot access instead of untyped dict keys.
+
+Bodies in `impl/endpoints.impl.jac`.
 """
 
 node Message {
@@ -23,20 +25,13 @@ walker:pub PostMessage {
         text: str,
         reports: list[Message] = [];
 
-    can post with Root entry {
-        report here ++> Message(author=self.author, text=self.text);
-    }
+    can post with Root entry;
 }
 
 walker:pub ListMessages {
     """Report every message in the guestbook, one report per node."""
     has reports: list[Message] = [];
 
-    can collect with Root entry {
-        visit [-->];
-    }
-
-    can gather with Message entry {
-        report here;
-    }
+    can collect with Root entry;
+    can gather with Message entry;
 }

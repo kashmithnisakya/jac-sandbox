@@ -1,12 +1,11 @@
-"""Implementations for the jac-sandbox frontend component."""
+"""Handlers for `components/GuestbookPanel.cl.jac`."""
 
-impl app.loadMessages -> None {
+impl GuestbookPanel.loadMessages -> None {
     result = root spawn ListMessages();
     messages = result.reports;
 }
 
-impl app.postMessage(e: FormEvent) -> None {
-    e.preventDefault();
+impl GuestbookPanel.postMessage -> None {
     if not author.strip() or not text.strip() {
         return;
     }
