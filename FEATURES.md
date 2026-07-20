@@ -129,9 +129,16 @@ that reproduces only the HTTP surface will still break these callers.
    env vars point at an unreachable Mongo (pymongo server-selection blocks with
    no timeout, no error message).
 3. OPEN (jaseci-labs/jac#7519): microservice auto-detection scans files outside the entry import
-   closure (`unsupported/sv_micro.jac` triggered it) and then derives wrong
-   service filenames (`features.rest_basic.jac`, `endpoints.jac` instead of
-   `endpoints.sv.jac`), so auto-split services can never boot.
+   closure and then derives wrong service filenames (`features.rest_basic.jac`,
+   `endpoints.jac` instead of `endpoints.sv.jac`), so auto-split services can
+   never boot. Found via `unsupported/sv_micro.jac`, an `sv import` module
+   deliberately NOT imported by main.jac, kept as the audit's loud-failure
+   case. That file is no longer in the tree; recover it with
+   `git show 1f4d097:unsupported/sv_micro.jac` if the audit case is needed
+   again — but note that its mere presence is enough to flip local runs into
+   microservice mode, since the scan does not respect the import closure.
+   Bug 10 is the same misfire reached from a *legitimate* `sv import` in
+   `frontend.cl.jac`, which cannot be deleted away.
 9. OPEN (jaseci-labs/jac#7520): under `jac start` the static @schedule task gets registered twice
    with mismatched class identity; one copy runs (beats advance), the
    phantom copy logs "Error executing task 'HeartbeatTick': Invalid walker
