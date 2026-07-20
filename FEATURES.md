@@ -140,9 +140,23 @@ that reproduces only the HTTP surface will still break these callers.
    Bug 10 is the same misfire reached from a *legitimate* `sv import` in
    `frontend.cl.jac`, which cannot be deleted away.
 9. OPEN (jaseci-labs/jac#7520): under `jac start` the static @schedule task gets registered twice
-   with mismatched class identity; one copy runs (beats advance), the
-   phantom copy logs "Error executing task 'HeartbeatTick': Invalid walker
-   object" every tick. Still reproduces; the log is noisy but beats do advance.
+   with mismatched class identity; one copy runs, the phantom copy logs
+   "Error executing task 'HeartbeatTick': Invalid walker object" every tick.
+
+   Measured over a 2.74h `jac start` run (interval=1.0), which narrows the
+   diagnosis beyond what the issue currently records:
+   - **Exactly two registrations, in 1:1 lockstep.** A 20s sample gives
+     20 wall-clock ticks -> 20 beats + 20 errors: `1.00 success + 1.00
+     failure` per tick. Not intermittent, not three copies.
+   - **The phantom does NO work.** If it executed the body before failing,
+     beats would advance 2/tick; they advance exactly 1/tick, so the
+     identity check rejects it before the ability runs. The bug is *noisy
+     but safe* — side effects land exactly once, no double-counting.
+   - **Timing is unaffected.** Effective interval 1.0000s over a 30s sample;
+     +18 beats drift over 9872s (0.18%).
+   - **The real cost is the log.** 9,836 of these in 2.74h at 1/s — 100% of
+     the ERROR log was this one line. A genuine error would be invisible in
+     it. That, not the scheduling, is what makes this worth fixing.
 4. FIXED: `jac start --scale` could not deploy from a macOS driver: the app
    seal exec'd the linux pod binary on the host (Exec format error). The seal
    now runs in a throwaway linux container (branch
