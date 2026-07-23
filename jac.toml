@@ -9,7 +9,7 @@ kind = "web-app"
 default_model = "mockllm"
 
 [scale.microservices]
-enabled = false
+enabled = true
 
 [scale.database]
 backend = "mongo"
@@ -40,3 +40,7 @@ watchdog = ">=3.0.0"
 base_route_app = "app"
 
 [plugins.client]
+
+[scale.scheduler]
+enabled = true
+leader_ttl = 6

@@ -15,3 +15,20 @@ walker HeartbeatTick {
 walker:pub ReadHeartbeat {
     can go with Root entry;
 }
+
+glob dyn_log: list = [];
+
+@schedule(trigger=ScheduleTrigger.DYNAMIC)
+walker DynPing {
+    has msg: str = "default-msg";
+
+    can go with Root entry {
+        dyn_log.append(self.msg);
+    }
+}
+
+walker:pub ReadDynLog {
+    can go with Root entry {
+        report {"count": len(dyn_log), "msgs": list(dyn_log)};
+    }
+}

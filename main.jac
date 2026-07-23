@@ -19,7 +19,7 @@ import from features.streaming { SseTicker }
 import from features.uploads { UploadDoc, UploadPublic }
 import from features.persistence { AddNote, CountNotes }
 import from features.permissions { ShareNote, ReadShared }
-import from features.scheduler { HeartbeatTick, ReadHeartbeat }
+import from features.scheduler { HeartbeatTick, ReadHeartbeat, DynPing, ReadDynLog }
 import from features.websocket { WsEcho, WsBroadcast, WsPrivate }
 import from features.webhook { HookOrderPaid, HookPing }
 import from features.events { EmitEvent, read_events }
